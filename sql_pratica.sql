@@ -8,6 +8,15 @@ SHOW STATUS LIKE 'Slow_queries';
 
 SHOW FULL PROCESSLIST;
 SELECT * FROM information_schema.innodb_trx;
+SELECT 
+    trx_id,
+    trx_query,
+    trx_wait_started,
+    trx_started,
+    TIMESTAMPDIFF(SECOND, trx_wait_started, NOW()) AS lock_duration_seconds
+FROM information_schema.innodb_trx
+WHERE trx_state = 'LOCK WAIT'\G;
+
 SELECT trx_isolation_level as 'isolation_level' FROM information_schema.innodb_trx;
 
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
